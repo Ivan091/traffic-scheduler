@@ -1,5 +1,6 @@
 package edu;
 
+import edu.model.Scheduler;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;

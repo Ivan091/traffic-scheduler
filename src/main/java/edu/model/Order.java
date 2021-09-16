@@ -1,12 +1,15 @@
-package edu;
+package edu.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.StringJoiner;
 
-
+@Entity(name = "Metrix")
 public class Order {
 
+    @Id
     public Integer id;
 
     public Integer source;
@@ -20,6 +23,10 @@ public class Order {
         this.source = source;
         this.destination = destination;
         this.localDateTime = localDateTime;
+    }
+
+
+    protected Order() {
     }
 
     @Override
