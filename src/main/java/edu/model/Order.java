@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.StringJoiner;
+
 
 @Entity(name = "Metrix")
 public class Order {
@@ -25,17 +25,17 @@ public class Order {
         this.localDateTime = localDateTime;
     }
 
-
+    @Deprecated
     protected Order() {
     }
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", Order.class.getSimpleName() + "[", "]")
-                .add("id=" + id)
-                .add("source=" + source)
-                .add("destination=" + destination)
-                .add("localDateTime=" + localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .toString();
+        return "Order{" +
+                "id=" + id +
+                ", source=" + source +
+                ", destination=" + destination +
+                ", localDateTime=" + localDateTime.format(DateTimeFormatter.ofPattern("hh:mm:ss")) +
+                '}';
     }
 }

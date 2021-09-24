@@ -1,10 +1,7 @@
 plugins {
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    application
+    id("org.springframework.boot") version "2.5.5"
     java
-}
-application {
-    mainClass.set("edu.Application")
 }
 repositories {
     mavenCentral()
@@ -33,7 +30,6 @@ dependencies {
     implementation("org.springframework:spring-core")
     implementation("org.springframework.data:spring-data-jpa")
     implementation("org.springframework.boot:spring-boot-autoconfigure")
-    implementation("org.springframework.boot:spring-boot-starter-jpa")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     runtimeOnly("org.postgresql:postgresql")
     testImplementation("org.mockito:mockito-core:3.11.2")
