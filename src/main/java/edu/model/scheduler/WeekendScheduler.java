@@ -1,4 +1,4 @@
-package edu.model;
+package edu.model.scheduler;
 
 import org.springframework.stereotype.Service;
 

@@ -8,8 +8,8 @@ repositories {
 }
 dependencyManagement {
     imports {
-        mavenBom("org.springframework:spring-framework-bom:5.3.5")
-        mavenBom("org.springframework.boot:spring-boot-dependencies:2.4.4")
+        mavenBom("org.springframework:spring-framework-bom:5.3.10")
+        mavenBom("org.springframework.boot:spring-boot-dependencies:2.5.5")
     }
     dependencies {
         dependencySet("io.springfox:3.0.0") {
@@ -20,7 +20,12 @@ dependencyManagement {
             entry("jackson-annotations")
             entry("jackson-databind")
         }
+        dependencySet("org.mockito:3.11.2") {
+            entry("mockito-core")
+            entry("mockito-junit-jupiter")
+        }
         dependency("org.postgresql:postgresql:42.2.23")
+        dependency("org.junit.jupiter:junit-jupiter-engine:5.7.2")
     }
 }
 dependencies {
@@ -32,9 +37,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-autoconfigure")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     runtimeOnly("org.postgresql:postgresql")
-    testImplementation("org.mockito:mockito-core:3.11.2")
-    testImplementation("org.mockito:mockito-junit-jupiter:3.11.2")
-    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.7.2")
+    testImplementation("org.mockito:mockito-core")
+    testImplementation("org.mockito:mockito-junit-jupiter")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine")
 }
 tasks.test {
     useJUnitPlatform()

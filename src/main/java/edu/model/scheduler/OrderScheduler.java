@@ -1,6 +1,8 @@
-package edu.model;
+package edu.model.scheduler;
 
 import edu.config.YamlPropertySourceFactory;
+import edu.model.Order;
+import edu.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
@@ -22,9 +24,13 @@ public class OrderScheduler implements Scheduler {
 
     private final Double discrepancy;
 
+    private final OrderRepository orderRepository;
+
     public OrderScheduler(@Value("${order.delta}") Double discrepancy,
+                          OrderRepository orderRepository,
                           Timer timer, Supplier<Order> orderSupplier, Function<Runnable, CallbackTask> intervalTimerFunction) {
         this.discrepancy = discrepancy;
+        this.orderRepository = orderRepository;
         this.timer = timer;
         this.orderSupplier = orderSupplier;
         this.intervalTimerFunction = intervalTimerFunction;
@@ -32,8 +38,7 @@ public class OrderScheduler implements Scheduler {
 
     @Override
     public void run() {
-        System.out.println(discrepancy);
-        System.out.println(orderSupplier.get());
-        timer.schedule(intervalTimerFunction.apply(this), new Random().nextInt(10000));
+        orderRepository.save(orderSupplier.get());
+        timer.schedule(intervalTimerFunction.apply(this), new Random().nextInt(10000) + 1000);
     }
 }

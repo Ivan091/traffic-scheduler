@@ -1,28 +1,35 @@
 package edu.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import javax.persistence.*;
+import java.sql.Timestamp;
 
 
-@Entity(name = "Metrix")
+@Entity
+@Table(name = "`Metrix`")
 public class Order {
 
     @Id
+    @Column(name = "`ID`")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer id;
 
-    public Integer source;
+    @Column(name = "`Origin`")
+    public Integer origin;
 
+    @Column(name = "`Destination`")
     public Integer destination;
 
-    public LocalDateTime localDateTime;
+    @Column(name = "`SeatsNumber`")
+    public Integer seatsNumber;
 
-    public Order(Integer id, Integer source, Integer destination, LocalDateTime localDateTime) {
-        this.id = id;
-        this.source = source;
+    @Column(name = "`TimeRequest`")
+    public Timestamp timeRequest;
+
+    public Order(Integer origin, Integer destination, Integer seatsNumber, Timestamp timeRequest) {
+        this.origin = origin;
         this.destination = destination;
-        this.localDateTime = localDateTime;
+        this.seatsNumber = seatsNumber;
+        this.timeRequest = timeRequest;
     }
 
     @Deprecated
@@ -33,9 +40,9 @@ public class Order {
     public String toString() {
         return "Order{" +
                 "id=" + id +
-                ", source=" + source +
+                ", source=" + origin +
                 ", destination=" + destination +
-                ", localDateTime=" + localDateTime.format(DateTimeFormatter.ofPattern("hh:mm:ss")) +
+                ", localDateTime=" + timeRequest +
                 '}';
     }
 }

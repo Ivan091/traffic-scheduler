@@ -1,4 +1,4 @@
-package edu.model;
+package edu.model.scheduler;
 
 import edu.config.YamlPropertySourceFactory;
 import org.springframework.beans.factory.annotation.Value;

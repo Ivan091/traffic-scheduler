@@ -3,3 +3,10 @@ spring:
     url: jdbc:postgresql://localhost/postgres
     username: postgres
     password: genius341295
+  jpa:
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+logging:
+  level:
+    org.hibernate.SQL: DEBUG

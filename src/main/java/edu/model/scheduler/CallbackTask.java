@@ -1,6 +1,7 @@
-package edu.model;
+package edu.model.scheduler;
 
 import java.util.TimerTask;
+
 
 public class CallbackTask extends TimerTask {
 
