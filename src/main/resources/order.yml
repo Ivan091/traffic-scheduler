@@ -1,5 +1,5 @@
 order:
-  delta: 0.75
+  blur: 0.75
   working-day:
     0: 30
     1: 30

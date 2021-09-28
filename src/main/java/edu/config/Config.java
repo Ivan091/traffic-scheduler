@@ -1,7 +1,7 @@
 package edu.config;
 
-import edu.model.Order;
 import edu.model.scheduler.CallbackTask;
+import edu.repository.Order;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import java.sql.Timestamp;

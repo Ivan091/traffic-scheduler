@@ -1,7 +1,7 @@
 package edu.model.scheduler;
 
-import edu.model.Order;
 import edu.model.scheduler.delay.Doorman;
+import edu.repository.Order;
 import edu.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 import java.util.Timer;
@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 
 
 @Service
-public class OrderScheduler implements Scheduler {
+public final class OrderScheduler implements Scheduler {
 
     private final Timer timer;
 
@@ -23,22 +23,31 @@ public class OrderScheduler implements Scheduler {
 
     private final OrderRepository orderRepository;
 
-    public OrderScheduler(OrderRepository orderRepository,
-                          Timer timer,
+    public OrderScheduler(Timer timer,
                           Supplier<Order> orderSupplier,
                           Function<Runnable, TimerTask> intervalTimerFunction,
-                          Doorman doorman
-    ) {
-        this.orderRepository = orderRepository;
+                          Doorman doorman,
+                          OrderRepository orderRepository) {
         this.timer = timer;
         this.orderSupplier = orderSupplier;
         this.intervalTimerFunction = intervalTimerFunction;
         this.doorman = doorman;
+        this.orderRepository = orderRepository;
     }
 
     @Override
     public void run() {
         orderRepository.save(orderSupplier.get());
-        timer.schedule(intervalTimerFunction.apply(this), doorman.choose());
+        timer.schedule(intervalTimerFunction.apply(this), doorman.choose().inMilliseconds());
+    }
+
+    @Override
+    public String toString() {
+        return "OrderScheduler[" +
+                "timer=" + timer + ", " +
+                "orderSupplier=" + orderSupplier + ", " +
+                "intervalTimerFunction=" + intervalTimerFunction + ", " +
+                "doorman=" + doorman + ", " +
+                "orderRepository=" + orderRepository + ']';
     }
 }

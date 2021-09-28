@@ -1,4 +1,4 @@
-package edu.model;
+package edu.repository;
 
 import javax.persistence.*;
 import java.sql.Timestamp;

@@ -1,29 +1,44 @@
 package edu.config;
 
+import edu.config.infrastructure.YamlSource;
 import edu.model.scheduler.delay.*;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
+import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 
 @Configuration
 public class DelayConfig {
 
     @Bean
-    Delayer workingDayDelayer(DelayProperties delayProperties, Delta delta) {
-        return new HourDelayer(delayProperties.weekend, delta);
+    public Function<Long, Delay> delayFunction() {
+        return DelayOrder::new;
     }
 
     @Bean
-    Delayer weekendDelayer(DelayProperties delayProperties, Delta delta) {
-        return new HourDelayer(delayProperties.workingDay, delta);
+    public Delayer workingDayDelayer(DelayProperties delayProperties, Function<Long, Delay> delayFunction, Blur blur) {
+        return new HourDelayer(delayProperties.weekend, delayFunction, blur);
     }
 
     @Bean
-    Delta delta(DelayProperties delayProperties) {
-        return new DelayDelta(delayProperties.delta);
+    public Delayer weekendDelayer(DelayProperties delayProperties, Function<Long, Delay> delayFunction, Blur blur) {
+        return new HourDelayer(delayProperties.workingDay, delayFunction, blur);
+    }
+
+    @Bean
+    public Blur delta(DelayProperties delayProperties) {
+        return new BlurHour(delayProperties.blur);
+    }
+
+    @Bean
+    public Doorman doorman(@Qualifier("weekendDelayer") Delayer weekendDelayer, @Qualifier("workingDayDelayer") Delayer workingDayDelayer, Supplier<LocalDateTime> localDateSupplier) {
+        return new DayTypeDoorman(weekendDelayer, workingDayDelayer, localDateSupplier);
     }
 
     @Component
@@ -35,10 +50,10 @@ public class DelayConfig {
 
         private Map<Integer, Double> workingDay;
 
-        private Double delta;
+        private Double blur;
 
-        public void setDelta(Double delta) {
-            this.delta = delta;
+        public void setBlur(Double blur) {
+            this.blur = blur;
         }
 
         public void setWorkingDay(Map<Integer, Double> workingDay) {

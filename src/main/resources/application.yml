@@ -6,7 +6,7 @@ spring:
   jpa:
     hibernate:
       naming:
-        physical-strategy: edu.config.QuotedNameStrategy
+        physical-strategy: edu.config.infrastructure.QuotedNameStrategy
 logging:
   level:
     org.hibernate.SQL: DEBUG
