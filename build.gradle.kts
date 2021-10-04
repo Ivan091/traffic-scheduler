@@ -37,6 +37,7 @@ dependencies {
     implementation("org.springframework.data:spring-data-jpa")
     implementation("org.springframework.boot:spring-boot-autoconfigure")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.apache.commons:commons-lang3")
     runtimeOnly("org.postgresql:postgresql")
     testImplementation("org.mockito:mockito-core")

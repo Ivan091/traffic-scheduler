@@ -1,12 +1,16 @@
 package edu.config;
 
 import edu.config.infrastructure.YamlSource;
+import edu.config.validation.ValidDayConfig;
 import edu.model.scheduler.delay.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.function.Function;
@@ -42,14 +46,19 @@ public class DelayConfig {
     }
 
     @Component
+    @Validated
     @YamlSource("order.yml")
     @ConfigurationProperties(prefix = "order")
     public static class DelayProperties {
 
+        @ValidDayConfig
         private Map<Integer, Double> weekend;
 
+        @ValidDayConfig
         private Map<Integer, Double> workingDay;
 
+        @Min(0)
+        @Max(1)
         private Double blur;
 
         public void setBlur(Double blur) {
