@@ -1,4 +1,4 @@
-package edu.model.scheduler.delay;
+package edu.model.delay;
 
 public record DelayOrder(Long milliseconds) implements Delay {
 

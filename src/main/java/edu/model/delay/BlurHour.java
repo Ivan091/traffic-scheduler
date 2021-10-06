@@ -1,4 +1,4 @@
-package edu.model.scheduler.delay;
+package edu.model.delay;
 
 import org.apache.commons.lang3.RandomUtils;
 

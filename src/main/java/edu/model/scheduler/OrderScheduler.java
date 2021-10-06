@@ -1,8 +1,8 @@
 package edu.model.scheduler;
 
-import edu.model.scheduler.delay.Doorman;
-import edu.repository.Order;
+import edu.model.delay.Doorman;
 import edu.repository.OrderRepository;
+import edu.repository.entity.Order;
 import org.springframework.stereotype.Service;
 import java.util.Timer;
 import java.util.TimerTask;

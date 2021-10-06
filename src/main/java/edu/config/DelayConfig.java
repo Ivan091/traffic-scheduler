@@ -2,8 +2,9 @@ package edu.config;
 
 import edu.config.infrastructure.YamlSource;
 import edu.config.validation.ValidDayConfig;
-import edu.model.scheduler.delay.*;
-import org.springframework.beans.factory.annotation.Qualifier;
+import edu.model.delay.*;
+import edu.repository.entity.embeddable.Path;
+import org.apache.commons.math3.distribution.PoissonDistribution;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,8 +42,27 @@ public class DelayConfig {
     }
 
     @Bean
-    public Doorman doorman(@Qualifier("weekendDelayer") Delayer weekendDelayer, @Qualifier("workingDayDelayer") Delayer workingDayDelayer, Supplier<LocalDateTime> localDateSupplier) {
+    public Doorman doorman(Delayer weekendDelayer, Delayer workingDayDelayer, Supplier<LocalDateTime> localDateSupplier) {
         return new DayTypeDoorman(weekendDelayer, workingDayDelayer, localDateSupplier);
+    }
+
+    @Bean
+    public Supplier<Path> stationNumberSupplier(Supplier<Integer> pathDistribution) {
+        return () -> supplyPath(pathDistribution);
+    }
+
+    @Bean
+    public Supplier<Integer> pathDistribution(DelayProperties delayProperties) {
+        var p = new PoissonDistribution(((double) delayProperties.stationCount) / 2);
+        return p::sample;
+    }
+
+    private Path supplyPath(Supplier<Integer> pathDistribution) {
+        Path p;
+        do {
+            p = new Path(pathDistribution.get(), pathDistribution.get());
+        } while (p.origin.equals(p.destination));
+        return p;
     }
 
     @Component
@@ -58,8 +78,15 @@ public class DelayConfig {
         private Map<Integer, Double> workingDay;
 
         @Min(0)
+        private int stationCount;
+
+        @Min(0)
         @Max(1)
         private Double blur;
+
+        public void setStationCount(int stationCount) {
+            this.stationCount = stationCount;
+        }
 
         public void setBlur(Double blur) {
             this.blur = blur;

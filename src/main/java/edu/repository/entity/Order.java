@@ -1,5 +1,6 @@
-package edu.repository;
+package edu.repository.entity;
 
+import edu.repository.entity.embeddable.Path;
 import javax.persistence.*;
 import java.sql.Timestamp;
 
@@ -13,17 +14,15 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer id;
 
-    public Integer origin;
-
-    public Integer destination;
+    @Embedded
+    public Path path;
 
     public Integer seatsNumber;
 
     public Timestamp timeRequest;
 
-    public Order(Integer origin, Integer destination, Integer seatsNumber, Timestamp timeRequest) {
-        this.origin = origin;
-        this.destination = destination;
+    public Order(Path path, Integer seatsNumber, Timestamp timeRequest) {
+        this.path = path;
         this.seatsNumber = seatsNumber;
         this.timeRequest = timeRequest;
     }
@@ -36,9 +35,9 @@ public class Order {
     public String toString() {
         return "Order{" +
                 "id=" + id +
-                ", source=" + origin +
-                ", destination=" + destination +
-                ", localDateTime=" + timeRequest +
+                ", path=" + path +
+                ", seatsNumber=" + seatsNumber +
+                ", timeRequest=" + timeRequest +
                 '}';
     }
 }

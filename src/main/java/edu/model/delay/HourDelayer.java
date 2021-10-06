@@ -1,4 +1,4 @@
-package edu.model.scheduler.delay;
+package edu.model.delay;
 
 import java.util.Map;
 import java.util.function.Function;

@@ -25,6 +25,7 @@ dependencyManagement {
             entry("mockito-junit-jupiter")
         }
         dependency("org.apache.commons:commons-lang3:3.12.0")
+        dependency("org.apache.commons:commons-math3:3.6.1")
         dependency("org.postgresql:postgresql:42.2.24")
         dependency("org.junit.jupiter:junit-jupiter-engine:5.8.0")
     }
@@ -39,6 +40,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.apache.commons:commons-lang3")
+    implementation("org.apache.commons:commons-math3")
     runtimeOnly("org.postgresql:postgresql")
     testImplementation("org.mockito:mockito-core")
     testImplementation("org.mockito:mockito-junit-jupiter")

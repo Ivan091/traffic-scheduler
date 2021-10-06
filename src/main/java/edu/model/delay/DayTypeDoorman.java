@@ -1,4 +1,4 @@
-package edu.model.scheduler.delay;
+package edu.model.delay;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;

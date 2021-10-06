@@ -1,4 +1,4 @@
-package edu.model.scheduler.delay;
+package edu.model.delay;
 
 public interface Delay {
 

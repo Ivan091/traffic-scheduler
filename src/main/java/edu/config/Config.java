@@ -1,7 +1,8 @@
 package edu.config;
 
 import edu.model.scheduler.CallbackTask;
-import edu.repository.Order;
+import edu.repository.entity.Order;
+import edu.repository.entity.embeddable.Path;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import java.sql.Timestamp;
@@ -27,8 +28,8 @@ public class Config {
     }
 
     @Bean
-    public Supplier<Order> orderSupplier(Supplier<LocalDateTime> localDateSupplier) {
-        return () -> new Order(random.nextInt(10), random.nextInt(10), random.nextInt(10), Timestamp.valueOf(localDateSupplier.get()));
+    public Supplier<Order> orderSupplier(Supplier<Path> pathSupplier, Supplier<LocalDateTime> localDateSupplier) {
+        return () -> new Order(pathSupplier.get(), random.nextInt(10), Timestamp.valueOf(localDateSupplier.get()));
     }
 
     @Bean
