@@ -47,22 +47,9 @@ public class DelayConfig {
     }
 
     @Bean
-    public Supplier<Path> stationNumberSupplier(Supplier<Integer> pathDistribution) {
-        return () -> supplyPath(pathDistribution);
-    }
-
-    @Bean
     public Supplier<Integer> pathDistribution(DelayProperties delayProperties) {
-        var p = new PoissonDistribution(((double) delayProperties.stationCount) / 2);
+        var p = new PoissonDistribution(delayProperties.stationCount * 0.5);
         return p::sample;
-    }
-
-    private Path supplyPath(Supplier<Integer> pathDistribution) {
-        Path p;
-        do {
-            p = new Path(pathDistribution.get(), pathDistribution.get());
-        } while (p.origin.equals(p.destination));
-        return p;
     }
 
     @Component
@@ -78,7 +65,7 @@ public class DelayConfig {
         private Map<Integer, Double> workingDay;
 
         @Min(0)
-        private int stationCount;
+        private Integer stationCount;
 
         @Min(0)
         @Max(1)
