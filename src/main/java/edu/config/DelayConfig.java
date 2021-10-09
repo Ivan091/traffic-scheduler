@@ -13,7 +13,6 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 
@@ -21,24 +20,13 @@ import java.util.function.Supplier;
 public class DelayConfig {
 
     @Bean
-    public Function<Long, Delay> delayFunction() {
-        return DelayImpl::new;
+    public HourDependentDelay workingDayDelay(DelayProperties delayProperties, Supplier<LocalDateTime> localDateTimeSupplier, Blur blur) {
+        return new HourDependentDelayImpl(delayProperties.workingDay, localDateTimeSupplier, blur);
     }
 
     @Bean
-    public HourDependentDelay workingDayDelay(DelayProperties delayProperties,
-                                              Supplier<LocalDateTime> localDateTimeSupplier,
-                                              Function<Long, Delay> delayFunction,
-                                              Blur blur) {
-        return new HourDependentDelayImpl(delayProperties.workingDay, localDateTimeSupplier, delayFunction, blur);
-    }
-
-    @Bean
-    public HourDependentDelay weekendDelay(DelayProperties delayProperties,
-                                           Supplier<LocalDateTime> localDateTimeSupplier,
-                                           Function<Long, Delay> delayFunction,
-                                           Blur blur) {
-        return new HourDependentDelayImpl(delayProperties.weekend, localDateTimeSupplier, delayFunction, blur);
+    public HourDependentDelay weekendDelay(DelayProperties delayProperties, Supplier<LocalDateTime> localDateTimeSupplier, Blur blur) {
+        return new HourDependentDelayImpl(delayProperties.weekend, localDateTimeSupplier, blur);
     }
 
     @Bean

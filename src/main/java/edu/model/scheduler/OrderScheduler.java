@@ -9,16 +9,16 @@ import java.util.concurrent.TimeUnit;
 @Service
 public final class OrderScheduler implements Scheduler {
 
-    private final ScheduledExecutorService taskScheduler;
+    private final ScheduledExecutorService executor;
 
     private final SaveOrder saveOrder;
 
     private final DayDependentDelay dayDependentDelay;
 
-    public OrderScheduler(ScheduledExecutorService taskScheduler,
+    public OrderScheduler(ScheduledExecutorService executor,
                           SaveOrder saveOrder,
                           DayDependentDelay dayDependentDelay) {
-        this.taskScheduler = taskScheduler;
+        this.executor = executor;
         this.saveOrder = saveOrder;
         this.dayDependentDelay = dayDependentDelay;
     }
@@ -26,6 +26,6 @@ public final class OrderScheduler implements Scheduler {
     @Override
     public void run() {
         saveOrder.run();
-        taskScheduler.schedule(this, dayDependentDelay.inMilliseconds(), TimeUnit.MILLISECONDS);
+        executor.schedule(this, dayDependentDelay.inMilliseconds(), TimeUnit.MILLISECONDS);
     }
 }

@@ -7,7 +7,7 @@ import java.util.stream.IntStream;
 
 
 public class DayConfigValidator implements ConstraintValidator<ValidDayConfig, Map<Integer, Double>> {
-
+    
     @Override
     public boolean isValid(Map<Integer, Double> value, ConstraintValidatorContext context) {
         return IntStream.range(0, 24).allMatch(value::containsKey) &&
