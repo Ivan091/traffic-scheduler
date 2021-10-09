@@ -3,7 +3,7 @@ package edu.model.delay;
 import org.apache.commons.lang3.RandomUtils;
 
 
-public record BlurHour(Double blur) implements Blur {
+public record BlurLinear(Double blur) implements Blur {
 
     @Override
     public Double blur(Double x) {

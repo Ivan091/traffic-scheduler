@@ -1,53 +1,31 @@
 package edu.model.scheduler;
 
-import edu.model.delay.Doorman;
-import edu.repository.OrderRepository;
-import edu.repository.entity.Order;
+import edu.model.delay.DayDependentDelay;
 import org.springframework.stereotype.Service;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 
 @Service
 public final class OrderScheduler implements Scheduler {
 
-    private final Timer timer;
+    private final ScheduledExecutorService taskScheduler;
 
-    private final Supplier<Order> orderSupplier;
+    private final SaveOrder saveOrder;
 
-    private final Function<Runnable, TimerTask> intervalTimerFunction;
+    private final DayDependentDelay dayDependentDelay;
 
-    private final Doorman doorman;
-
-    private final OrderRepository orderRepository;
-
-    public OrderScheduler(Timer timer,
-                          Supplier<Order> orderSupplier,
-                          Function<Runnable, TimerTask> intervalTimerFunction,
-                          Doorman doorman,
-                          OrderRepository orderRepository) {
-        this.timer = timer;
-        this.orderSupplier = orderSupplier;
-        this.intervalTimerFunction = intervalTimerFunction;
-        this.doorman = doorman;
-        this.orderRepository = orderRepository;
+    public OrderScheduler(ScheduledExecutorService taskScheduler,
+                          SaveOrder saveOrder,
+                          DayDependentDelay dayDependentDelay) {
+        this.taskScheduler = taskScheduler;
+        this.saveOrder = saveOrder;
+        this.dayDependentDelay = dayDependentDelay;
     }
 
     @Override
     public void run() {
-        orderRepository.save(orderSupplier.get());
-        timer.schedule(intervalTimerFunction.apply(this), doorman.choose().inMilliseconds());
-    }
-
-    @Override
-    public String toString() {
-        return "OrderScheduler[" +
-                "timer=" + timer + ", " +
-                "orderSupplier=" + orderSupplier + ", " +
-                "intervalTimerFunction=" + intervalTimerFunction + ", " +
-                "doorman=" + doorman + ", " +
-                "orderRepository=" + orderRepository + ']';
+        saveOrder.run();
+        taskScheduler.schedule(this, dayDependentDelay.inMilliseconds(), TimeUnit.MILLISECONDS);
     }
 }

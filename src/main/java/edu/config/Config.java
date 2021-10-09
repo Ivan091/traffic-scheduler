@@ -1,14 +1,17 @@
 package edu.config;
 
-import edu.model.scheduler.CallbackTask;
+import edu.model.scheduler.SaveOrder;
+import edu.repository.OrderRepository;
 import edu.repository.entity.Order;
 import edu.repository.entity.embeddable.Path;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.*;
-import java.util.function.Function;
+import java.util.Random;
+import java.util.Timer;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.function.Supplier;
 
 
@@ -23,6 +26,11 @@ public class Config {
     }
 
     @Bean
+    public ScheduledExecutorService scheduledExecutorService() {
+        return new ScheduledThreadPoolExecutor(1);
+    }
+
+    @Bean
     public Timer timer() {
         return new Timer();
     }
@@ -33,7 +41,7 @@ public class Config {
     }
 
     @Bean
-    public Function<Runnable, TimerTask> intervalTimerFunction() {
-        return CallbackTask::new;
+    public SaveOrder saveOrder(OrderRepository orderRepository, Supplier<Order> orderSupplier) {
+        return () -> orderRepository.save(orderSupplier.get());
     }
 }

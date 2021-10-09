@@ -3,7 +3,6 @@ package edu.config;
 import edu.config.infrastructure.YamlSource;
 import edu.config.validation.ValidDayConfig;
 import edu.model.delay.*;
-import edu.repository.entity.embeddable.Path;
 import org.apache.commons.math3.distribution.PoissonDistribution;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -23,33 +22,38 @@ public class DelayConfig {
 
     @Bean
     public Function<Long, Delay> delayFunction() {
-        return DelayOrder::new;
+        return DelayImpl::new;
     }
 
     @Bean
-    public Delayer workingDayDelayer(DelayProperties delayProperties, Function<Long, Delay> delayFunction, Blur blur) {
-        return new HourDelayer(delayProperties.weekend, delayFunction, blur);
+    public HourDependentDelay workingDayDelay(DelayProperties delayProperties,
+                                              Supplier<LocalDateTime> localDateTimeSupplier,
+                                              Function<Long, Delay> delayFunction,
+                                              Blur blur) {
+        return new HourDependentDelayImpl(delayProperties.workingDay, localDateTimeSupplier, delayFunction, blur);
     }
 
     @Bean
-    public Delayer weekendDelayer(DelayProperties delayProperties, Function<Long, Delay> delayFunction, Blur blur) {
-        return new HourDelayer(delayProperties.workingDay, delayFunction, blur);
+    public HourDependentDelay weekendDelay(DelayProperties delayProperties,
+                                           Supplier<LocalDateTime> localDateTimeSupplier,
+                                           Function<Long, Delay> delayFunction,
+                                           Blur blur) {
+        return new HourDependentDelayImpl(delayProperties.weekend, localDateTimeSupplier, delayFunction, blur);
+    }
+
+    @Bean
+    public DayDependentDelay dayDependentDelay(HourDependentDelay workingDayDelay, HourDependentDelay weekendDelay, Supplier<LocalDateTime> localDateTimeSupplier) {
+        return new DayDependentDelayImpl(workingDayDelay, weekendDelay, localDateTimeSupplier);
     }
 
     @Bean
     public Blur delta(DelayProperties delayProperties) {
-        return new BlurHour(delayProperties.blur);
-    }
-
-    @Bean
-    public Doorman doorman(Delayer weekendDelayer, Delayer workingDayDelayer, Supplier<LocalDateTime> localDateSupplier) {
-        return new DayTypeDoorman(weekendDelayer, workingDayDelayer, localDateSupplier);
+        return new BlurLinear(delayProperties.blur);
     }
 
     @Bean
     public Supplier<Integer> pathDistribution(DelayProperties delayProperties) {
-        var p = new PoissonDistribution(delayProperties.stationCount * 0.5);
-        return p::sample;
+        return new PoissonDistribution(delayProperties.stationCount * 0.5)::sample;
     }
 
     @Component
