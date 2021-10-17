@@ -1,5 +1,4 @@
 order:
-  blur: 0.75
   station-count: 10
   working-day:
     0: 30

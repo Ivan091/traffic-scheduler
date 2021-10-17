@@ -26,7 +26,7 @@ public class DelayConfig {
     }
 
     @Bean
-    public Blur blur(DelayProperties delayProperties) {
-        return new BlurLinear(delayProperties.blur);
+    public Blur blur() {
+        return new BlurLogarithmic();
     }
 }

@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.function.Supplier;
 
 
-public record DayDependentDelay(Delay workingDayDelayer, Delay weekendDelayer,
+public record DayDependentDelay(Delay workingDayDelay, Delay weekendDelay,
                                 Supplier<LocalDateTime> localDateSupplier) implements Delay {
 
     @Override
@@ -13,9 +13,9 @@ public record DayDependentDelay(Delay workingDayDelayer, Delay weekendDelayer,
         var dateTime = localDateSupplier.get();
         var day = dateTime.getDayOfWeek();
         if (day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY) {
-            return weekendDelayer.inMilliseconds();
+            return weekendDelay.inMilliseconds();
         } else {
-            return workingDayDelayer.inMilliseconds();
+            return workingDayDelay.inMilliseconds();
         }
     }
 }
