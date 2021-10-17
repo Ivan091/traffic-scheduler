@@ -14,7 +14,7 @@ public class StationConfig {
 
     @Bean
     public Supplier<Integer> originSupplier(DelayProperties delayProperties) {
-        var nd = new NormalDistribution(delayProperties.stationCount * 0.5, delayProperties.stationCount * 0.5);
+        var nd = new NormalDistribution((delayProperties.stationCount - 1) * 0.5, delayProperties.stationCount * 0.2);
         return () -> Stream.generate(nd::sample)
                 .map(d -> (int) Math.round(d))
                 .dropWhile(i -> i < 0 || i >= delayProperties.stationCount)

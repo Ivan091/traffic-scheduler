@@ -26,7 +26,6 @@ public final class OrderScheduler implements Runnable {
     @Override
     public void run() {
         saveOrder.run();
-        System.out.printf("Next order in: %.3f sec\n", dayDependentDelay.inMilliseconds() * 0.001);
         executor.schedule(this, dayDependentDelay.inMilliseconds(), TimeUnit.MILLISECONDS);
     }
 }
