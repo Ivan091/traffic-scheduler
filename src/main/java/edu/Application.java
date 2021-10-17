@@ -1,18 +1,27 @@
 package edu;
 
-import edu.model.scheduler.Scheduler;
-import org.springframework.boot.WebApplicationType;
+import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 
 
 @SpringBootApplication
-public class Application {
+public class Application implements ApplicationRunner {
+
+    private final Runnable orderScheduler;
+
+    public Application(Runnable orderScheduler) {
+        this.orderScheduler = orderScheduler;
+    }
 
     public static void main(String[] args) {
-        var context = new SpringApplicationBuilder(Application.class)
+        new SpringApplicationBuilder(Application.class)
                 .web(WebApplicationType.NONE)
-                .run();
-        context.getBean(Scheduler.class).run();
+                .run(args);
+    }
+
+    @Override
+    public void run(ApplicationArguments args) {
+        orderScheduler.run();
     }
 }

@@ -1,23 +1,23 @@
-package edu.model.scheduler;
+package edu.model;
 
-import edu.model.delay.DayDependentDelay;
+import edu.model.delay.Delay;
 import org.springframework.stereotype.Service;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 
 @Service
-public final class OrderScheduler implements Scheduler {
+public final class OrderScheduler implements Runnable {
 
     private final ScheduledExecutorService executor;
 
-    private final SaveOrder saveOrder;
+    private final Runnable saveOrder;
 
-    private final DayDependentDelay dayDependentDelay;
+    private final Delay dayDependentDelay;
 
     public OrderScheduler(ScheduledExecutorService executor,
-                          SaveOrder saveOrder,
-                          DayDependentDelay dayDependentDelay) {
+                          Runnable saveOrder,
+                          Delay dayDependentDelay) {
         this.executor = executor;
         this.saveOrder = saveOrder;
         this.dayDependentDelay = dayDependentDelay;

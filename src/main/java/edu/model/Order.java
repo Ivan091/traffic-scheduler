@@ -1,6 +1,5 @@
-package edu.repository.entity;
+package edu.model;
 
-import edu.repository.entity.embeddable.Path;
 import javax.persistence.*;
 import java.sql.Timestamp;
 

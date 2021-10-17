@@ -1,6 +1,6 @@
 package edu.repository;
 
-import edu.repository.entity.Order;
+import edu.model.Order;
 import org.springframework.data.repository.CrudRepository;
 
 

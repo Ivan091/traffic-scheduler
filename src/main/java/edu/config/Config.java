@@ -1,9 +1,8 @@
 package edu.config;
 
-import edu.model.scheduler.SaveOrder;
+import edu.model.Order;
+import edu.model.Path;
 import edu.repository.OrderRepository;
-import edu.repository.entity.Order;
-import edu.repository.entity.embeddable.Path;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import java.sql.Timestamp;
@@ -41,7 +40,7 @@ public class Config {
     }
 
     @Bean
-    public SaveOrder saveOrder(OrderRepository orderRepository, Supplier<Order> orderSupplier) {
+    public Runnable saveOrder(OrderRepository orderRepository, Supplier<Order> orderSupplier) {
         return () -> orderRepository.save(orderSupplier.get());
     }
 }

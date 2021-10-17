@@ -1,4 +1,4 @@
-package edu.repository.entity.embeddable;
+package edu.model;
 
 import javax.persistence.Embeddable;
 
