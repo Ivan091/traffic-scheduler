@@ -1,6 +1,7 @@
 package edu.model;
 
 import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 
 
 @Embeddable
@@ -25,6 +26,11 @@ public class Path {
                 "origin=" + origin +
                 ", destination=" + destination +
                 '}';
+    }
+
+    @Transient
+    public boolean isRightWay() {
+        return origin < destination;
     }
 }
 

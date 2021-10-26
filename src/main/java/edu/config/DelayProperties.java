@@ -21,8 +21,15 @@ public class DelayProperties {
     @ValidDayConfig
     public Map<Integer, Double> workingDay;
 
+    @Min(1)
+    public Integer maxSeatsCount;
+
     @Min(2)
     public Integer stationCount;
+
+    public void setMaxSeatsCount(Integer maxSeatsCount) {
+        this.maxSeatsCount = maxSeatsCount;
+    }
 
     public void setStationCount(int stationCount) {
         this.stationCount = stationCount;

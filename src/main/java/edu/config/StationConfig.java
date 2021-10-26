@@ -13,25 +13,24 @@ import java.util.stream.Stream;
 public class StationConfig {
 
     @Bean
-    public Supplier<Integer> originSupplier(DelayProperties delayProperties) {
+    public Supplier<Integer> destinationSupplier(DelayProperties delayProperties) {
         var nd = new NormalDistribution((delayProperties.stationCount - 1) * 0.5, delayProperties.stationCount * 0.2);
         return () -> Stream.generate(nd::sample)
                 .map(d -> (int) Math.round(d))
-                .dropWhile(i -> i < 0 || i >= delayProperties.stationCount)
+                .takeWhile(i -> i >= 1 && i < delayProperties.stationCount)
                 .limit(1)
                 .findFirst()
                 .orElseThrow();
     }
 
     @Bean
-    public Supplier<Integer> destinationSupplier(DelayProperties delayProperties) {
-        return () -> RandomUtils.nextInt(0, delayProperties.stationCount);
-    }
-
-    @Bean
-    public Supplier<Path> pathSupplier(Supplier<Integer> originSupplier, Supplier<Integer> destinationSupplier) {
-        return () -> Stream.generate(() -> new Path(originSupplier.get(), destinationSupplier.get()))
-                .dropWhile(p -> p.origin.equals(p.destination))
+    public Supplier<Path> pathSupplier(Supplier<Integer> destinationSupplier) {
+        return () -> Stream.generate(() -> {
+                    var destination = destinationSupplier.get();
+                    var origin = RandomUtils.nextInt(0, destination);
+                    return new Path(origin, destination);
+                })
+                .takeWhile(Path::isRightWay)
                 .limit(1)
                 .findFirst()
                 .orElseThrow();
