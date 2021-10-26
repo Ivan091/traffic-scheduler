@@ -14,10 +14,10 @@ public class StationConfig {
 
     @Bean
     public Supplier<Integer> destinationSupplier(DelayProperties delayProperties) {
-        var nd = new NormalDistribution((delayProperties.stationCount - 1) * 0.5, delayProperties.stationCount * 0.2);
+        var nd = new NormalDistribution((delayProperties.stationsCount - 1) * 0.5, delayProperties.stationsCount * 0.2);
         return () -> Stream.generate(nd::sample)
                 .map(d -> (int) Math.round(d))
-                .takeWhile(i -> i >= 1 && i < delayProperties.stationCount)
+                .takeWhile(i -> i >= 1 && i < delayProperties.stationsCount)
                 .limit(1)
                 .findFirst()
                 .orElseThrow();

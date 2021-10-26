@@ -22,17 +22,17 @@ public class DelayProperties {
     public Map<Integer, Double> workingDay;
 
     @Min(1)
-    public Integer maxSeatsCount;
+    public Integer maxSeatsNumber;
 
     @Min(2)
-    public Integer stationCount;
+    public Integer stationsCount;
 
-    public void setMaxSeatsCount(Integer maxSeatsCount) {
-        this.maxSeatsCount = maxSeatsCount;
+    public void setMaxSeatsNumber(Integer maxSeatsNumber) {
+        this.maxSeatsNumber = maxSeatsNumber;
     }
 
-    public void setStationCount(int stationCount) {
-        this.stationCount = stationCount;
+    public void setStationsCount(int stationsCount) {
+        this.stationsCount = stationsCount;
     }
 
     public void setWorkingDay(Map<Integer, Double> workingDay) {

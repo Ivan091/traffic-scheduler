@@ -34,7 +34,7 @@ public class Config {
 
     @Bean
     public Supplier<Order> orderSupplier(DelayProperties delayProperties, Supplier<Path> pathSupplier, Supplier<LocalDateTime> localDateSupplier) {
-        return () -> new Order(pathSupplier.get(), RandomUtils.nextInt(1, delayProperties.maxSeatsCount), Timestamp.valueOf(localDateSupplier.get()));
+        return () -> new Order(pathSupplier.get(), RandomUtils.nextInt(1, delayProperties.maxSeatsNumber + 1), Timestamp.valueOf(localDateSupplier.get()));
     }
 
     @Bean
