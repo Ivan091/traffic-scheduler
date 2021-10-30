@@ -1,18 +1,20 @@
 package edu;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 
 @SpringBootApplication
+@EnableJdbcRepositories
+@EnableScheduling
 public class Application implements ApplicationRunner {
 
-    private final Runnable orderScheduler;
-
-    public Application(Runnable orderScheduler) {
-        this.orderScheduler = orderScheduler;
-    }
+    @Autowired
+    private Runnable firstTimeScheduler;
 
     public static void main(String[] args) {
         new SpringApplicationBuilder(Application.class)
@@ -22,6 +24,6 @@ public class Application implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        orderScheduler.run();
+        firstTimeScheduler.run();
     }
 }

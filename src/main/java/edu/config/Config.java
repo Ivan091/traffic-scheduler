@@ -1,20 +1,22 @@
 package edu.config;
 
-import edu.model.Order;
-import edu.model.Path;
-import edu.repository.OrderRepository;
-import org.apache.commons.lang3.RandomUtils;
+import edu.model.intensity.CurrentHourIntensities;
+import edu.model.intensity.Intensity;
+import edu.model.scheduling.NextMomentRule;
+import edu.repo.OrderRepo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import java.sql.Timestamp;
+import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import java.time.LocalDateTime;
-import java.util.Timer;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.List;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 
 @Configuration
+@Slf4j
 public class Config {
 
     @Bean
@@ -23,22 +25,15 @@ public class Config {
     }
 
     @Bean
-    public ScheduledExecutorService scheduledExecutorService() {
-        return new ScheduledThreadPoolExecutor(1);
+    public TaskScheduler taskScheduler() {
+        ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler();
+        taskScheduler.setPoolSize(10);
+        return taskScheduler;
     }
 
     @Bean
-    public Timer timer() {
-        return new Timer();
-    }
-
-    @Bean
-    public Supplier<Order> orderSupplier(DelayProperties delayProperties, Supplier<Path> pathSupplier, Supplier<LocalDateTime> localDateSupplier) {
-        return () -> new Order(pathSupplier.get(), RandomUtils.nextInt(1, delayProperties.maxSeatsNumber + 1), Timestamp.valueOf(localDateSupplier.get()));
-    }
-
-    @Bean
-    public Runnable saveOrder(OrderRepository orderRepository, Supplier<Order> orderSupplier) {
-        return () -> orderRepository.save(orderSupplier.get());
+    public Function<List<Intensity>, CurrentHourIntensities> currentHourIntensitiesFactory(Supplier<LocalDateTime> localDateSupplier,
+                                                                                           TaskScheduler taskScheduler, OrderRepo orderRepo) {
+        return (intensities) -> CurrentHourIntensities.of(intensities, new NextMomentRule(), localDateSupplier, taskScheduler, orderRepo);
     }
 }

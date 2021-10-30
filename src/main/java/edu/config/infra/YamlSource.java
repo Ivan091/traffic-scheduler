@@ -1,4 +1,4 @@
-package edu.config.infrastructure;
+package edu.config.infra;
 
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.annotation.AliasFor;

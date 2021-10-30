@@ -1,13 +1,12 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost/postgres
+    url: jdbc:postgresql://localhost/metrix
     username: postgres
     password: postgres
-  jpa:
-    hibernate:
-      naming:
-        physical-strategy: edu.config.infrastructure.QuotedNameStrategy
 logging:
   level:
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type: TRACE
+    root: info
+    org:
+      springframework:
+        jdbc:
+          core: trace
