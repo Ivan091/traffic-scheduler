@@ -49,7 +49,7 @@ public final class CurrentHourIntensities {
     }
 
     private void executeSingleOrigin(SingleOriginIntensities singleOriginIntensities) {
-        var order = new Order(singleOriginIntensities.generatePath(), 1, localDateTimeSupplier.get());
+        var order = Order.of(singleOriginIntensities.generatePath(), 1, localDateTimeSupplier.get());
         orderRepo.save(order);
     }
 }

@@ -23,7 +23,7 @@ public class Order {
 
     LocalDateTime timeRequest;
 
-    public Order(Path path, Integer seatsNumber, LocalDateTime timeRequest) {
-        this(null, path, seatsNumber, timeRequest);
+    public static Order of(Path path, Integer seatsNumber, LocalDateTime timeRequest) {
+        return new Order(null, path, seatsNumber, timeRequest);
     }
 }
