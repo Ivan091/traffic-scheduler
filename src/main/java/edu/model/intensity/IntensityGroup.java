@@ -20,7 +20,7 @@ public final class IntensityGroup {
         return intensities.stream().map(x -> new ImmutablePair<>(x.getIntensity(), x.getDestination())).collect(Collectors.toList());
     }
 
-    public Double sumOfProbabilities() {
+    public Double sumOfIntensities() {
         return intensities.stream().map(Intensity::getIntensity).mapToDouble(Double::doubleValue).sum();
     }
 

@@ -20,7 +20,7 @@ public final class SingleOriginIntensities {
         return new Path(origin, destinationSupplier.get());
     }
 
-    public Double sumOfProbabilities() {
-        return intensityGroup.sumOfProbabilities();
+    public Double sumOfIntensities() {
+        return intensityGroup.sumOfIntensities();
     }
 }

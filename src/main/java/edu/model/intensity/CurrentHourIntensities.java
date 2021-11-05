@@ -35,7 +35,7 @@ public final class CurrentHourIntensities {
 
     public void planForTheNextHour() {
         singleOriginIntensities.parallelStream().forEach(x -> {
-                    var probabilitySum = x.sumOfProbabilities();
+                    var probabilitySum = x.sumOfIntensities();
                     var planTime = localDateTimeSupplier.get();
                     var startHour = planTime.getHour();
                     planTime = nextMomentRule.calculateNext(planTime, probabilitySum);
