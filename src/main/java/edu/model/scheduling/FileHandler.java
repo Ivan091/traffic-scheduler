@@ -41,7 +41,6 @@ public final class FileHandler implements BiConsumer<SingleOriginIntensities, Lo
     @SneakyThrows
     private void prepareToWrite() {
         actualName = generateFileName();
-        var file = new File(actualName);
         try (var writer = new BufferedWriter(new FileWriter(actualName))) {
             writer.append(Order.toCSVHeader());
             writer.newLine();

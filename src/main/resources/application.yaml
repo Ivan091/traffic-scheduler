@@ -4,5 +4,5 @@ spring:
     username: postgres
     password: postgres
 scheduling:
-  mode: real_time
+  mode: one_day
   date: 2015-01-23
