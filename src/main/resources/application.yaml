@@ -3,10 +3,6 @@ spring:
     url: jdbc:postgresql://localhost/metrix
     username: postgres
     password: postgres
-logging:
-  level:
-    root: info
-    org:
-      springframework:
-        jdbc:
-          core: trace
+scheduling:
+  mode: real_time
+  date: 2015-01-23

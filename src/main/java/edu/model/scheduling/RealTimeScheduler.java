@@ -1,11 +1,10 @@
 package edu.model.scheduling;
 
-import edu.model.intensity.CurrentHourIntensities;
 import edu.model.intensity.Intensity;
+import edu.model.intensity.OneHourIntensities;
 import edu.repo.IntensityRepo;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
@@ -15,10 +14,9 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 
-@EqualsAndHashCode
-@ToString
 @Service
-public final class FirstTimeScheduler implements Runnable {
+@ConditionalOnProperty(name = "scheduling.mode", havingValue = "real_time")
+public final class RealTimeScheduler implements Runnable {
 
     @Autowired
     private IntensityRepo intensityRepo;
@@ -27,7 +25,7 @@ public final class FirstTimeScheduler implements Runnable {
     private Supplier<LocalDateTime> localDateTimeSupplier;
 
     @Autowired
-    private Function<List<Intensity>, CurrentHourIntensities> currentHourIntensitiesFactory;
+    private Function<List<Intensity>, OneHourIntensities> currentHourIntensitiesFactory;
 
     @Override
     @Scheduled(cron = "0 0 * * * *")
@@ -35,6 +33,6 @@ public final class FirstTimeScheduler implements Runnable {
         var currentTime = localDateTimeSupplier.get();
         var intensities = intensityRepo.findByObservationInterval(currentTime.getHour());
         intensities = intensities.stream().filter(x -> x.getIntensity() > 0).collect(Collectors.toList());
-        currentHourIntensitiesFactory.apply(intensities).planForTheNextHour();
+        currentHourIntensitiesFactory.apply(intensities).planForTheNextHour(localDateTimeSupplier.get());
     }
 }

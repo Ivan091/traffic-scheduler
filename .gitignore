@@ -1,5 +1,7 @@
 
 *.iml
+*.log
+*.csv
 
 target
 build

@@ -51,6 +51,8 @@ dependencies {
     testImplementation("org.mockito:mockito-junit-jupiter")
     testImplementation("org.junit.jupiter:junit-jupiter-engine")
 
+
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
     testCompileOnly("org.projectlombok:lombok")
@@ -58,4 +60,7 @@ dependencies {
 }
 tasks.test {
     useJUnitPlatform()
+}
+tasks.processResources {
+    dependsOn(tasks.compileJava)
 }

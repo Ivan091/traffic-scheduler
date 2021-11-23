@@ -26,4 +26,12 @@ public class Order {
     public static Order of(Path path, Integer seatsNumber, LocalDateTime timeRequest) {
         return new Order(null, path, seatsNumber, timeRequest);
     }
+
+    public static String toCSVHeader() {
+        return Path.toCSVHeader() + ",SeatsNumber,TimeRequest";
+    }
+
+    public String toCSV() {
+        return String.format("%s,%s,%s", path.toCSV(), seatsNumber, timeRequest);
+    }
 }
