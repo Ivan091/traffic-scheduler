@@ -13,7 +13,9 @@ public class SchedulingProps {
 
     public Mode mode;
 
-    public LocalDate date;
+    public LocalDate beginDate;
+
+    public LocalDate endDate;
 
     public enum Mode {
         REAL_TIME,

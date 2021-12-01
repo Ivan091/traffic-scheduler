@@ -5,7 +5,7 @@ import edu.model.order.Order;
 import edu.repo.OrderRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
@@ -15,7 +15,7 @@ import java.util.function.BiConsumer;
 
 @Slf4j
 @Service
-@ConditionalOnProperty(name = "scheduling.mode", havingValue = "real_time")
+@ConditionalOnBean(RealTimeScheduler.class)
 public class RealTimeHandler implements BiConsumer<SingleOriginIntensities, LocalDateTime> {
 
     @Autowired

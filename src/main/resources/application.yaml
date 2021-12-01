@@ -5,4 +5,5 @@ spring:
     password: postgres
 scheduling:
   mode: one_day
-  date: 2015-01-23
+  beginDate: 2015-01-23
+  endDate: 2015-01-30

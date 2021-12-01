@@ -11,12 +11,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 
 @Service
 @Slf4j
 @ConditionalOnProperty(name = "scheduling.mode", havingValue = "one_day")
-public final class OneDayScheduler implements Runnable {
+public final class MultipleDaysScheduler implements Runnable {
 
     @Autowired
     private IntensityRepo intensityRepo;
@@ -25,15 +26,18 @@ public final class OneDayScheduler implements Runnable {
     private Function<List<Intensity>, OneHourIntensities> currentHourIntensitiesFactory;
 
     @Autowired
-    private SchedulingProps schedulingProps;
+    private SchedulingProps props;
 
     @Override
     public void run() {
-        for (int i = 0; i < 24; i++) {
-            var planTime = schedulingProps.getDate().atTime(i, 0);
-            var intensities = intensityRepo.findByObservationInterval(planTime.getHour());
-            intensities = intensities.stream().filter(x -> x.getIntensity() > 0).collect(Collectors.toList());
-            currentHourIntensitiesFactory.apply(intensities).planForTheNextHour(planTime);
+        var intensityGroup = StreamSupport.stream(intensityRepo.findAll().spliterator(), true)
+                .filter(x -> x.getIntensity() > 0).collect(Collectors.groupingBy(Intensity::getObservationInterval));
+        var endDate = props.getEndDate();
+        for (var currentDate = props.getBeginDate(); currentDate.isBefore(endDate); currentDate = currentDate.plusDays(1)) {
+            for (int i = 0; i < 24; i++) {
+                var planTime = currentDate.atTime(i, 0);
+                currentHourIntensitiesFactory.apply(intensityGroup.get(i)).planForTheNextHour(planTime);
+            }
         }
     }
 }
