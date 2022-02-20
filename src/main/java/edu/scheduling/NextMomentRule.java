@@ -1,15 +1,11 @@
-package edu.model.scheduling;
+package edu.scheduling;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import org.apache.commons.lang3.RandomUtils;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 
-@EqualsAndHashCode
-@ToString
 @Service
 public final class NextMomentRule {
 

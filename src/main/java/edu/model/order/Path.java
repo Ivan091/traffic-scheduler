@@ -1,22 +1,8 @@
 package edu.model.order;
 
-import lombok.Value;
+public record Path(Integer origin,
+                   Integer destination) {
 
-
-@Value
-public class Path {
-
-    Integer origin;
-
-    Integer destination;
-
-    public static String toCSVHeader() {
-        return "Origin,Destination";
-    }
-
-    public String toCSV() {
-        return String.format("%s,%s", origin, destination);
-    }
 }
 
 

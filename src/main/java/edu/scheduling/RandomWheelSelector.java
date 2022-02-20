@@ -1,4 +1,4 @@
-package edu.model.scheduling;
+package edu.scheduling;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
