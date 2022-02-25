@@ -1,8 +1,10 @@
-package edu.scheduling;
+package edu.scheduling.oneDay;
 
 import edu.config.SchedulingProps;
-import edu.model.intensity.Intensity;
+import edu.model.intensity.PathIntensity;
 import edu.repo.IntensityRepo;
+import edu.scheduling.IntensityDisperser;
+import edu.scheduling.NextHourScheduler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -25,10 +27,13 @@ public final class MultipleDaysScheduler implements Runnable {
     @Autowired
     private NextHourScheduler nextHourScheduler;
 
+    @Autowired
+    private IntensityDisperser intensityDisperser;
+
     @Override
     public void run() {
         var intensityGroup = StreamSupport.stream(intensityRepo.findAll().spliterator(), true)
-                .filter(x -> x.intensity() > 0).collect(Collectors.groupingBy(Intensity::observationInterval));
+                .filter(x -> x.getIntensity() > 0).map(intensityDisperser).collect(Collectors.groupingBy(PathIntensity::getObservationInterval));
         var endDate = props.getEndDate();
         for (var currentDate = props.getBeginDate(); currentDate.isBefore(endDate); currentDate = currentDate.plusDays(1)) {
             for (int i = 0; i < 24; i++) {

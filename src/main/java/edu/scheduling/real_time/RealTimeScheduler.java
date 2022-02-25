@@ -1,6 +1,8 @@
-package edu.scheduling;
+package edu.scheduling.real_time;
 
 import edu.repo.IntensityRepo;
+import edu.scheduling.IntensityDisperser;
+import edu.scheduling.NextHourScheduler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -23,12 +25,15 @@ public final class RealTimeScheduler implements Runnable {
     @Autowired
     private NextHourScheduler nextHourScheduler;
 
+    @Autowired
+    private IntensityDisperser intensityDisperser;
+
     @Override
     @Scheduled(cron = "0 0 * * * *")
     public void run() {
         var currentTime = localDateTimeSupplier.get();
         var intensities = intensityRepo.findByObservationInterval(currentTime.getHour());
-        intensities = intensities.stream().filter(x -> x.intensity() > 0).collect(Collectors.toList());
+        intensities = intensities.stream().filter(x -> x.getIntensity() > 0).map(intensityDisperser).collect(Collectors.toList());
         nextHourScheduler.scheduleForTheNextHour(intensities, currentTime);
     }
 }

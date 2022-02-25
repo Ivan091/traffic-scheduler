@@ -1,6 +1,6 @@
 package edu.service;
 
-import edu.model.intensity.Intensity;
+import edu.model.intensity.PathIntensity;
 import edu.model.intensity.SchedulingIntensities;
 import edu.scheduling.RandomWheelSelector;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -14,17 +14,17 @@ import static java.util.stream.Collectors.*;
 @Service
 public final class SchedulingIntensitiesService {
 
-    public List<ImmutablePair<Double, Integer>> probabilitiesAsPairList(List<Intensity> intensities) {
-        return intensities.stream().map(x -> new ImmutablePair<>(x.intensity(), x.path().destination())).collect(Collectors.toList());
+    public List<ImmutablePair<Double, Integer>> probabilitiesAsPairList(List<PathIntensity> intensities) {
+        return intensities.stream().map(x -> new ImmutablePair<>(x.getIntensity(), x.getPath().getDestination())).collect(Collectors.toList());
     }
 
-    public Double sumOfIntensities(List<Intensity> intensities) {
-        return intensities.stream().map(Intensity::intensity).mapToDouble(Double::doubleValue).sum();
+    public Double sumOfIntensities(List<PathIntensity> intensities) {
+        return intensities.stream().mapToDouble(PathIntensity::getIntensity).sum();
     }
 
-    public List<SchedulingIntensities> toSingleOrigin(List<Intensity> intensities) {
+    public List<SchedulingIntensities> toSingleOrigin(List<PathIntensity> intensities) {
         return intensities.stream()
-                .collect(groupingBy(x -> x.path().origin()))
+                .collect(groupingBy(x -> x.getPath().getOrigin()))
                 .entrySet()
                 .stream()
                 .map(e -> {

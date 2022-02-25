@@ -1,6 +1,6 @@
 package edu.scheduling;
 
-import edu.model.intensity.Intensity;
+import edu.model.intensity.PathIntensity;
 import edu.model.intensity.SchedulingIntensities;
 import edu.service.SchedulingIntensitiesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public final class NextHourScheduler {
     @Autowired
     private SchedulingIntensitiesService schedulingIntensitiesService;
 
-    public void scheduleForTheNextHour(List<Intensity> intensities, LocalDateTime startDateTime) {
+    public void scheduleForTheNextHour(List<PathIntensity> intensities, LocalDateTime startDateTime) {
         schedulingIntensitiesService.toSingleOrigin(intensities).parallelStream().forEach(x -> {
                     var probabilitySum = schedulingIntensitiesService.sumOfIntensities(intensities);
                     var startHour = startDateTime.getHour();

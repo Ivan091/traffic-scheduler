@@ -1,4 +1,4 @@
-package edu.scheduling;
+package edu.scheduling.oneDay;
 
 import edu.model.intensity.SchedulingIntensities;
 import edu.model.order.Order;
