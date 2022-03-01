@@ -15,7 +15,7 @@ import java.util.stream.StreamSupport;
 
 @Service
 @Slf4j
-public final class MultipleDaysScheduler {
+public final class BatchProcessingScheduler {
 
     @Autowired
     private IntensityRepo intensityRepo;

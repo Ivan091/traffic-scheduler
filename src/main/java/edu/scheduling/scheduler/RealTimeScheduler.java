@@ -17,9 +17,6 @@ import java.util.stream.Collectors;
 public final class RealTimeScheduler {
 
     @Autowired
-    private DBHandler realTimeHandler;
-
-    @Autowired
     private IntensityRepo intensityRepo;
 
     @Autowired
@@ -34,12 +31,15 @@ public final class RealTimeScheduler {
     @Autowired
     private IntensityDisperser intensityDisperser;
 
+    @Autowired
+    private DBHandler dbHandler;
+
     public void run() {
         Runnable task = () -> {
             var currentTime = localDateTimeSupplier.get();
             var intensities = intensityRepo.findByObservationInterval(currentTime.getHour());
             intensities = intensities.stream().filter(x -> x.getIntensity() > 0).map(intensityDisperser).collect(Collectors.toList());
-            nextHourScheduler.scheduleForTheNextHour(intensities, currentTime, realTimeHandler);
+            nextHourScheduler.scheduleForTheNextHour(intensities, currentTime, dbHandler);
         };
         var trigger = new CronTrigger("0 0 * * * *");
         taskScheduler.schedule(task, trigger);

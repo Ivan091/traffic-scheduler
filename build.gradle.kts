@@ -44,15 +44,24 @@ tasks.processResources {
     dependsOn(tasks.compileJava)
 }
 tasks.bootRun {
-    mainClass.set("edu.Application")
+    args = listOf("realTime")
 }
 
+tasks.register("bootBatchProcessing") {
+    group = "application"
+    doFirst {
+        tasks.bootRun.configure {
+            args = listOf("batchProcessing")
+        }
+    }
+    finalizedBy(tasks.bootRun)
+}
 tasks.register("bootCheck") {
     group = "application"
     doFirst {
         tasks.bootRun.configure {
-            mainClass.set("edu.Check")
+            args = listOf("check")
         }
     }
-    finalizedBy("bootRun")
+    finalizedBy(tasks.bootRun)
 }

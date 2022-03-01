@@ -8,7 +8,6 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import javax.annotation.PostConstruct;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.function.BiConsumer;
@@ -26,7 +25,8 @@ public final class CSVFileHandler implements BiConsumer<SchedulingIntensities, L
 
     private String actualName;
 
-    @PostConstruct
+    private boolean isCreated;
+
     @SneakyThrows
     void defineFileName() {
         actualName = generateFileName();
@@ -34,13 +34,19 @@ public final class CSVFileHandler implements BiConsumer<SchedulingIntensities, L
             writer.append(orderService.toCsvHeader());
             writer.newLine();
         }
+        isCreated = true;
     }
 
     @Override
     @SneakyThrows
     public void accept(SchedulingIntensities singleOriginIntensities, LocalDateTime localDateTime) {
+        synchronized (this) {
+            if (!isCreated) {
+                defineFileName();
+            }
+        }
         log.trace("Planned to {} ", localDateTime);
-        File file = new File(actualName);
+        var file = new File(actualName);
         try (var writer = new BufferedWriter(new FileWriter(file, true))) {
             var order = Order.of(pathService.generatePath(singleOriginIntensities), 1, localDateTime);
             writer.append(orderService.toCsv(order));

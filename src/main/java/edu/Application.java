@@ -1,6 +1,8 @@
 package edu;
 
-import edu.scheduling.ModeSwitcher;
+import edu.scheduling.scheduler.BatchProcessingScheduler;
+import edu.scheduling.scheduler.RealTimeScheduler;
+import edu.service.CheckService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,7 +17,13 @@ import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories;
 public class Application implements ApplicationRunner {
 
     @Autowired
-    private ModeSwitcher scheduler;
+    private BatchProcessingScheduler batchProcessingScheduler;
+
+    @Autowired
+    private RealTimeScheduler realTimeScheduler;
+
+    @Autowired
+    private CheckService checkService;
 
     public static void main(String[] args) {
         new SpringApplicationBuilder(Application.class)
@@ -25,6 +33,10 @@ public class Application implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        scheduler.run();
+        switch (args.getSourceArgs()[0]) {
+            case "realTime" -> realTimeScheduler.run();
+            case "batchProcessing" -> batchProcessingScheduler.run();
+            case "check" -> checkService.check();
+        }
     }
 }

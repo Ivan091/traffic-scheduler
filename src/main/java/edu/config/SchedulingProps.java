@@ -19,14 +19,7 @@ public class SchedulingProps {
     @Max(1)
     public Double intensityDispersion;
 
-    public Mode mode;
-
     public LocalDate beginDate;
 
     public LocalDate endDate;
-
-    public enum Mode {
-        REAL_TIME,
-        ONE_DAY,
-    }
 }
