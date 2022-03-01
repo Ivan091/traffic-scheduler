@@ -13,21 +13,17 @@ import java.util.function.BiConsumer;
 @Service
 public final class NextHourScheduler {
 
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-    @Autowired
-    private BiConsumer<SchedulingIntensities, LocalDateTime> handler;
-
     @Autowired
     private NextMomentRule nextMomentRule;
 
     @Autowired
     private SchedulingIntensitiesService schedulingIntensitiesService;
 
-    public void scheduleForTheNextHour(List<PathIntensity> intensities, LocalDateTime startDateTime) {
+    public void scheduleForTheNextHour(List<PathIntensity> intensities, LocalDateTime startDateTime, BiConsumer<SchedulingIntensities, LocalDateTime> handler) {
         schedulingIntensitiesService.toSingleOrigin(intensities).parallelStream().forEach(x -> {
                     var probabilitySum = schedulingIntensitiesService.sumOfIntensities(intensities);
                     var startHour = startDateTime.getHour();
-                    var planTime = nextMomentRule.calculateNext(startDateTime, probabilitySum);
+                    var planTime = nextMomentRule.calculateNext(startDateTime, probabilitySum).withNano(0);
                     while (planTime.getHour() == startHour) {
                         handler.accept(x, planTime);
                         planTime = nextMomentRule.calculateNext(planTime, probabilitySum);

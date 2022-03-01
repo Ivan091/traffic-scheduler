@@ -1,4 +1,4 @@
-package edu.scheduling.oneDay;
+package edu.scheduling.handler;
 
 import edu.model.intensity.SchedulingIntensities;
 import edu.model.order.Order;
@@ -7,7 +7,6 @@ import edu.service.PathService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.io.*;
@@ -17,8 +16,7 @@ import java.util.function.BiConsumer;
 
 @Slf4j
 @Service
-@ConditionalOnBean(MultipleDaysScheduler.class)
-public final class FileHandler implements BiConsumer<SchedulingIntensities, LocalDateTime> {
+public final class CSVFileHandler implements BiConsumer<SchedulingIntensities, LocalDateTime> {
 
     @Autowired
     private PathService pathService;

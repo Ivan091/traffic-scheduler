@@ -1,4 +1,4 @@
-package edu.scheduling.real_time;
+package edu.scheduling.handler;
 
 import edu.model.intensity.SchedulingIntensities;
 import edu.model.order.Order;
@@ -6,7 +6,6 @@ import edu.repo.OrderRepo;
 import edu.service.PathService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
@@ -16,8 +15,7 @@ import java.util.function.BiConsumer;
 
 @Slf4j
 @Service
-@ConditionalOnBean(RealTimeScheduler.class)
-public class RealTimeHandler implements BiConsumer<SchedulingIntensities, LocalDateTime> {
+public class DBHandler implements BiConsumer<SchedulingIntensities, LocalDateTime> {
 
     @Autowired
     private TaskScheduler taskScheduler;
@@ -33,7 +31,8 @@ public class RealTimeHandler implements BiConsumer<SchedulingIntensities, LocalD
         log.info("Planned to {} ", localDateTime);
         taskScheduler.schedule(() -> {
             var order = Order.of(pathService.generatePath(schedulingIntensities), 1, localDateTime);
-            orderRepo.save(order);
+            var savedOrder = orderRepo.save(order);
+            log.info("Saved order {}", savedOrder);
         }, Timestamp.valueOf(localDateTime));
     }
 }

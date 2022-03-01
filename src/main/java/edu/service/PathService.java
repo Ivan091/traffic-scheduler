@@ -9,6 +9,6 @@ import org.springframework.stereotype.Service;
 public final class PathService {
 
     public Path generatePath(SchedulingIntensities x) {
-        return new Path(x.origin(), x.destinationSupplier().get());
+        return new Path(x.getOrigin(), x.getDestinationSupplier().get());
     }
 }

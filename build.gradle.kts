@@ -43,3 +43,16 @@ tasks.test {
 tasks.processResources {
     dependsOn(tasks.compileJava)
 }
+tasks.bootRun {
+    mainClass.set("edu.Application")
+}
+
+tasks.register("bootCheck") {
+    group = "application"
+    doFirst {
+        tasks.bootRun.configure {
+            mainClass.set("edu.Check")
+        }
+    }
+    finalizedBy("bootRun")
+}

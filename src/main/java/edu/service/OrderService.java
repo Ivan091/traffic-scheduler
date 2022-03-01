@@ -12,6 +12,6 @@ public final class OrderService {
     }
 
     public String toCsv(Order order) {
-        return String.format("%s,%s,%s,%s", order.path().getOrigin(), order.path().getDestination(), order.seatsNumber(), order.timeRequest());
+        return String.format("%s,%s,%s,%s", order.getPath().getOrigin(), order.getPath().getDestination(), order.getSeatsNumber(), order.getTimeRequest());
     }
 }

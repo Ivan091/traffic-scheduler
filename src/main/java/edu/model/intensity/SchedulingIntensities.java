@@ -1,9 +1,15 @@
 package edu.model.intensity;
 
+import lombok.Value;
+import lombok.With;
 import java.util.function.Supplier;
 
 
-public record SchedulingIntensities(Integer origin,
-                                    Supplier<Integer> destinationSupplier) {
+@Value
+@With
+public class SchedulingIntensities {
 
+    Integer origin;
+
+    Supplier<Integer> destinationSupplier;
 }

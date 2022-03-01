@@ -14,7 +14,7 @@ public class Path {
 
     @Override
     public String toString() {
-        return "Path{" + origin + "->" + destination + '}';
+        return "Path(" + origin + "->" + destination + ')';
     }
 }
 
