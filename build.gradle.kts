@@ -47,11 +47,11 @@ tasks.bootRun {
     args = listOf("realTime")
 }
 
-tasks.register("bootBatchProcessing") {
+tasks.register("bootBatch") {
     group = "application"
     doFirst {
         tasks.bootRun.configure {
-            args = listOf("batchProcessing")
+            args = listOf("batch")
         }
     }
     finalizedBy(tasks.bootRun)

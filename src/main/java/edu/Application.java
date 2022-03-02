@@ -35,7 +35,7 @@ public class Application implements ApplicationRunner {
     public void run(ApplicationArguments args) {
         switch (args.getSourceArgs()[0]) {
             case "realTime" -> realTimeScheduler.run();
-            case "batchProcessing" -> batchProcessingScheduler.run();
+            case "batch" -> batchProcessingScheduler.run();
             case "check" -> checkService.check();
         }
     }

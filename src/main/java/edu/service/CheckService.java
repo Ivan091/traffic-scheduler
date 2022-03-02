@@ -21,8 +21,11 @@ public final class CheckService {
 
     @SneakyThrows
     public void checkFile(File file) {
+        log.info("Scanning file: {}", file.getName());
         var br = new BufferedReader(new FileReader(file));
         String st;
+        var successCount = 0;
+        var errorCount = 0;
         while ((st = br.readLine()) != null) {
             var matcher = pattern.matcher(st);
             while (matcher.find()) {
@@ -31,17 +34,29 @@ public final class CheckService {
                 var sub = st.substring(start + 21, end - 1);
                 var id = Integer.valueOf(sub);
                 if (orderRepo.existsById(id)) {
-                    log.info("Found order with id={}", id);
+                    successCount++;
                 } else {
+                    errorCount++;
                     log.error("Was not found order {}", st.substring(start + 12));
                 }
             }
         }
+        log.info("File {} success count = {}", file.getName(), successCount);
+        if (errorCount > 0) {
+            log.error("File {} error count = {}", file.getName(), errorCount);
+        }
     }
 
     public void check() {
-        checkFile(new File("logs/logs.log"));
-        for (var file : Objects.requireNonNull(new File("logs/archived").listFiles())) {
+        checkDir(new File("logs"));
+    }
+
+    private void checkDir(File file) {
+        if (file.isDirectory()) {
+            for (var curFile : Objects.requireNonNull(file.listFiles())) {
+                checkDir(curFile);
+            }
+        } else {
             checkFile(file);
         }
     }
