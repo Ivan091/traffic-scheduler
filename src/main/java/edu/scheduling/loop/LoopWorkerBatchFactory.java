@@ -6,5 +6,5 @@ import java.time.LocalDateTime;
 
 public interface LoopWorkerBatchFactory {
 
-    LoopWorkerBatch create(Integer origin, SchedulingHandler handler, LocalDateTime beginTime, LocalDateTime endTime);
+    Runnable create(Integer origin, SchedulingHandler handler, LocalDateTime beginTime, LocalDateTime endTime);
 }

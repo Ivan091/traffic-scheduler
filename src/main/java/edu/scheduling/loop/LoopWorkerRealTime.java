@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Slf4j
-public class LoopWorkerRealTime implements Runnable {
+public class LoopWorkerRealTime implements Worker {
 
     private final Integer origin;
 
@@ -22,10 +22,10 @@ public class LoopWorkerRealTime implements Runnable {
 
     @Override
     public void run() {
-        loopWorkerService.schedule(origin, handler, this::scheduleNext);
+        loopWorkerService.schedule(origin, handler, this::next);
     }
 
-    public void scheduleNext(LocalDateTime planTime) {
+    public void next(LocalDateTime planTime) {
         taskScheduler.schedule(this, Timestamp.valueOf(planTime));
     }
 }

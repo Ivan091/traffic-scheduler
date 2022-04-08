@@ -11,13 +11,11 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories;
-import org.springframework.scheduling.annotation.EnableScheduling;
 
 
 @SpringBootApplication
 @EnableJdbcRepositories
 @EnableCaching
-@EnableScheduling
 @EnableConfigurationProperties
 public class Application implements ApplicationRunner {
 
@@ -34,19 +32,14 @@ public class Application implements ApplicationRunner {
     private ConfigurableApplicationContext applicationContext;
 
     public static void main(String[] args) {
-        new SpringApplicationBuilder(Application.class)
-                .web(WebApplicationType.NONE)
-                .run(args);
+        new SpringApplicationBuilder(Application.class).web(WebApplicationType.NONE).run(args);
     }
 
     @Override
     public void run(ApplicationArguments args) {
         switch (args.getSourceArgs()[0]) {
             case "realTime" -> realTimeScheduler.run();
-            case "batch" -> {
-                batchProcessingScheduler.run();
-                applicationContext.close();
-            }
+            case "batch" -> batchProcessingScheduler.run();
             case "check" -> {
                 checkService.check();
                 applicationContext.close();

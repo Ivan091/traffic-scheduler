@@ -22,10 +22,8 @@ public class LoopWorkerBatch implements Runnable {
 
     @Override
     public void run() {
-        log.info("Starting batch generation for origin={}", origin);
         while (currentTime.isBefore(endTime)) {
             currentTime = loopWorkerService.schedule(origin, handler, currentTime);
         }
-        log.info("Batch generation done for origin={}", origin);
     }
 }

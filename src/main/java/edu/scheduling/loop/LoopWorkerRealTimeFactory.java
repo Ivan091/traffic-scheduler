@@ -5,5 +5,5 @@ import edu.scheduling.SchedulingHandler;
 
 public interface LoopWorkerRealTimeFactory {
 
-    LoopWorkerRealTime create(Integer origin, SchedulingHandler handler);
+    Worker create(Integer origin, SchedulingHandler handler);
 }
