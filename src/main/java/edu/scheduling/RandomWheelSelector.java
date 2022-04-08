@@ -1,7 +1,6 @@
 package edu.scheduling;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import java.util.ArrayList;
@@ -11,8 +10,9 @@ import java.util.function.Supplier;
 
 @EqualsAndHashCode
 @ToString
-public final class RandomWheelSelector<V> implements Supplier<V> {
+public class RandomWheelSelector<V> implements Supplier<V> {
 
+    @Getter
     private final double maxProbability;
 
     private final List<ImmutablePair<Double, V>> resultPairs;

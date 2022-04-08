@@ -2,20 +2,21 @@ package edu.scheduling.handler;
 
 import edu.model.intensity.SchedulingIntensities;
 import edu.model.order.Order;
+import edu.scheduling.SchedulingHandler;
 import edu.service.OrderService;
 import edu.service.PathService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import javax.annotation.PreDestroy;
 import java.io.*;
 import java.time.LocalDateTime;
-import java.util.function.BiConsumer;
 
 
 @Slf4j
 @Service
-public final class CSVFileHandler implements BiConsumer<SchedulingIntensities, LocalDateTime> {
+public class CSVFileHandler implements SchedulingHandler, Closeable {
 
     @Autowired
     private PathService pathService;
@@ -26,6 +27,8 @@ public final class CSVFileHandler implements BiConsumer<SchedulingIntensities, L
     private String actualName;
 
     private boolean isCreated;
+
+    private BufferedWriter writer;
 
     @SneakyThrows
     void defineFileName() {
@@ -39,19 +42,22 @@ public final class CSVFileHandler implements BiConsumer<SchedulingIntensities, L
 
     @Override
     @SneakyThrows
-    public void accept(SchedulingIntensities singleOriginIntensities, LocalDateTime localDateTime) {
-        synchronized (this) {
-            if (!isCreated) {
-                defineFileName();
-            }
+    public synchronized void accept(SchedulingIntensities singleOriginIntensities, LocalDateTime localDateTime) {
+        if (!isCreated) {
+            defineFileName();
+            writer = new BufferedWriter(new FileWriter(actualName, true));
         }
         log.trace("Planned to {} ", localDateTime);
-        var file = new File(actualName);
-        try (var writer = new BufferedWriter(new FileWriter(file, true))) {
-            var order = Order.of(pathService.generatePath(singleOriginIntensities), 1, localDateTime);
-            writer.append(orderService.toCsv(order));
-            writer.newLine();
-        }
+        var order = Order.of(pathService.generatePath(singleOriginIntensities), 1, localDateTime);
+        writer.append(orderService.toCsv(order));
+        writer.newLine();
+    }
+
+    @Override
+    @PreDestroy
+    @SneakyThrows
+    public void close() {
+        writer.close();
     }
 
     private String generateFileName() {

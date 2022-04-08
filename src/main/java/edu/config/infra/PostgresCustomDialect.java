@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Primary
-public final class PostgresCustomDialect extends PostgresDialect {
+public class PostgresCustomDialect extends PostgresDialect {
 
     @Override
     @NonNull

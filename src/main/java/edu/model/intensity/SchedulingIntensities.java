@@ -11,5 +11,7 @@ public class SchedulingIntensities {
 
     Integer origin;
 
+    Double probabilitySum;
+
     Supplier<Integer> destinationSupplier;
 }

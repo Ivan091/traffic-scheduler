@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 
 @Service
 @Slf4j
-public final class CheckService {
+public class CheckService {
 
     private final Pattern pattern = Pattern.compile("Saved order Order\\(id=\\d*,");
 
@@ -37,7 +37,7 @@ public final class CheckService {
                     successCount++;
                 } else {
                     errorCount++;
-                    log.error("Was not found order {}", st.substring(start + 12));
+                    log.error("Was not found in DB {}", st.substring(start + 12));
                 }
             }
         }

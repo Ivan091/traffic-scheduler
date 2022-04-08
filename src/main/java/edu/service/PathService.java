@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public final class PathService {
+public class PathService {
 
     public Path generatePath(SchedulingIntensities x) {
         return new Path(x.getOrigin(), x.getDestinationSupplier().get());

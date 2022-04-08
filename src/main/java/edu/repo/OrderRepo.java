@@ -6,5 +6,4 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface OrderRepo extends CrudRepository<Order, Integer> {
 
-    boolean existsById(int id);
 }

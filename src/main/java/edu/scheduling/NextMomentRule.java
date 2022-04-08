@@ -7,7 +7,7 @@ import java.time.temporal.ChronoUnit;
 
 
 @Service
-public final class NextMomentRule {
+public class NextMomentRule {
 
     public LocalDateTime calculateNext(LocalDateTime current, Double probabilitySum) {
         var delta = -Math.log(RandomUtils.nextDouble(0.03, 0.97)) / probabilitySum;

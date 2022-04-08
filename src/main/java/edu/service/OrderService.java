@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public final class OrderService {
+public class OrderService {
 
     public String toCsvHeader() {
         return "Origin,Destination,SeatsNumber,TimeRequest";

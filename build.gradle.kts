@@ -1,3 +1,5 @@
+import org.springframework.boot.gradle.tasks.run.BootRun
+
 plugins {
     id("org.springframework.boot") version "2.5.5"
     java
@@ -46,22 +48,15 @@ tasks.processResources {
 tasks.bootRun {
     args = listOf("realTime")
 }
-
-tasks.register("bootBatch") {
+tasks.register<BootRun>("bootBatch") {
     group = "application"
-    doFirst {
-        tasks.bootRun.configure {
-            args = listOf("batch")
-        }
-    }
-    finalizedBy(tasks.bootRun)
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("edu.Application")
+    args = listOf("batch")
 }
-tasks.register("bootCheck") {
+tasks.register<BootRun>("bootCheck") {
     group = "application"
-    doFirst {
-        tasks.bootRun.configure {
-            args = listOf("check")
-        }
-    }
-    finalizedBy(tasks.bootRun)
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("edu.Application")
+    args = listOf("check")
 }

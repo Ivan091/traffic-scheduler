@@ -9,7 +9,7 @@ import java.util.function.Function;
 
 
 @Component
-public final class IntensityDisperser implements Function<PathIntensity, PathIntensity> {
+public class IntensityDisperser implements Function<PathIntensity, PathIntensity> {
 
     @Autowired
     private SchedulingProps props;
