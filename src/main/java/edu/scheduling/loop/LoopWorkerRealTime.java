@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.TaskScheduler;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 
 @AllArgsConstructor
@@ -22,10 +21,7 @@ public class LoopWorkerRealTime implements Worker {
 
     @Override
     public void run() {
-        loopWorkerService.schedule(origin, handler, this::next);
-    }
-
-    public void next(LocalDateTime planTime) {
+        var planTime = loopWorkerService.planTime(origin, handler);
         taskScheduler.schedule(this, Timestamp.valueOf(planTime));
     }
 }

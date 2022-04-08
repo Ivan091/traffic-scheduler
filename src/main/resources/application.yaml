@@ -4,6 +4,6 @@ spring:
     username: postgres
     password: postgres
 scheduling:
-  beginDate: 2015-01-29
+  beginDate: 2015-01-01
   endDate: 2015-01-30
   intensity-dispersion: 0.2

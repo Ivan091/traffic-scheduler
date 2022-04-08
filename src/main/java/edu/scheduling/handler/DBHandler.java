@@ -27,7 +27,7 @@ public class DBHandler implements SchedulingHandler {
     private PathService pathService;
 
     @Override
-    public void accept(SchedulingIntensities schedulingIntensities, LocalDateTime localDateTime) {
+    public void handle(SchedulingIntensities schedulingIntensities, LocalDateTime localDateTime) {
         log.trace("Planned to {} ", localDateTime);
         taskScheduler.schedule(() -> {
             var order = Order.of(pathService.generatePath(schedulingIntensities), 1, localDateTime);

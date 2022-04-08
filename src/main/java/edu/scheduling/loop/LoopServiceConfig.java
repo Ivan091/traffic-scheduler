@@ -1,7 +1,10 @@
 package edu.scheduling.loop;
 
+import edu.config.SchedulingProps;
+import edu.model.TimeRange;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.TaskScheduler;
 
 
@@ -9,12 +12,13 @@ import org.springframework.scheduling.TaskScheduler;
 public class LoopServiceConfig {
 
     @Bean
-    public LoopWorkerRealTimeFactory scheduleRealTime(TaskScheduler taskScheduler, LoopWorkerService loopWorkerService) {
+    public LoopWorkerFactory loopWorkerRealTimeFactory(TaskScheduler taskScheduler, LoopWorkerService loopWorkerService) {
         return (origin, handler) -> new LoopWorkerRealTime(origin, handler, taskScheduler, loopWorkerService);
     }
 
     @Bean
-    public LoopWorkerBatchFactory scheduleBatch(LoopWorkerService loopWorkerService) {
-        return (origin, handler, endTime, currentTime) -> new LoopWorkerBatch(origin, handler, loopWorkerService, endTime, currentTime);
+    public LoopWorkerFactory loopWorkerBatchFactory(TaskExecutor taskExecutor, LoopWorkerService loopWorkerService, SchedulingProps schedulingProps) {
+        var range = new TimeRange(schedulingProps.beginDate, schedulingProps.endDate);
+        return (origin, handler) -> new LoopWorkerBatch(origin, handler, taskExecutor, loopWorkerService, range);
     }
 }

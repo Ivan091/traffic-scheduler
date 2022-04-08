@@ -39,14 +39,14 @@ public class CSVFileHandler implements SchedulingHandler {
 
     @Override
     @SneakyThrows
-    public void accept(SchedulingIntensities singleOriginIntensities, LocalDateTime localDateTime) {
+    public void handle(SchedulingIntensities singleOriginIntensities, LocalDateTime localDateTime) {
         if (!isCreated) {
             defineFileName();
         }
         log.trace("Planned to {} ", localDateTime);
         var order = Order.of(pathService.generatePath(singleOriginIntensities), 1, localDateTime);
         synchronized (this) {
-            try (var writer = new BufferedWriter(new FileWriter(actualName))) {
+            try (var writer = new BufferedWriter(new FileWriter(actualName, true))) {
                 writer.append(orderService.toCsv(order));
                 writer.newLine();
             }
