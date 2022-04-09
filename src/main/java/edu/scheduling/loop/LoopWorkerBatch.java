@@ -3,37 +3,36 @@ package edu.scheduling.loop;
 import edu.model.TimeRange;
 import edu.model.intensity.SchedulingIntensities;
 import edu.scheduling.SchedulingHandler;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.task.TaskExecutor;
-import java.time.LocalDateTime;
+import org.springframework.stereotype.Service;
 
 
-@Slf4j
-@AllArgsConstructor
-public class LoopWorkerBatch implements Worker {
+@Service
+public class LoopWorkerBatch implements WorkerBatch {
 
-    private final Integer origin;
+    @Qualifier("CSVFileHandler")
+    @Autowired
+    private SchedulingHandler handler;
 
-    private final SchedulingHandler handler;
+    @Autowired
+    private TaskExecutor taskExecutor;
 
-    private final TaskExecutor taskExecutor;
-
-    private final LoopWorkerService loopWorkerService;
-
-    private TimeRange timeRange;
+    @Autowired
+    private LoopWorkerService loopWorkerService;
 
     @Override
-    public void run() {
-        if (timeRange.isAscending()) {
-            loopWorkerService.schedule(origin, this, timeRange.getBegin());
+    public void start(Integer origin, TimeRange range) {
+        Scheduling adapter = (intensities, time) -> scheduleNext(intensities, range.withCurrent(time));
+        if (range.isAscending()) {
+            loopWorkerService.schedule(origin, adapter, range.getCurrent());
         }
     }
 
     @Override
-    public void scheduleNext(SchedulingIntensities intensities, LocalDateTime time) {
-        timeRange = timeRange.withBegin(time);
-        taskExecutor.execute(() -> handler.handle(intensities, time));
-        taskExecutor.execute(this);
+    public void scheduleNext(SchedulingIntensities intensities, TimeRange time) {
+        taskExecutor.execute(() -> handler.handle(intensities, time.getCurrent()));
+        taskExecutor.execute(() -> start(intensities.getOrigin(), time));
     }
 }

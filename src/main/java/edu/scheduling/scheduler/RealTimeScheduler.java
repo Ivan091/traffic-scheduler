@@ -1,8 +1,7 @@
 package edu.scheduling.scheduler;
 
 import edu.repo.IntensityRepo;
-import edu.scheduling.handler.DBHandler;
-import edu.scheduling.loop.LoopWorkerFactory;
+import edu.scheduling.loop.Worker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,15 +15,9 @@ public class RealTimeScheduler {
     private IntensityRepo intensityRepo;
 
     @Autowired
-    private DBHandler dbHandler;
-
-    @Autowired
-    private LoopWorkerFactory loopWorkerRealTimeFactory;
+    private Worker worker;
 
     public void run() {
-        intensityRepo.getOrigins()
-                .parallelStream()
-                .map(o -> loopWorkerRealTimeFactory.create(o, dbHandler))
-                .forEach(Runnable::run);
+        intensityRepo.getOrigins().forEach(x -> worker.start(x));
     }
 }

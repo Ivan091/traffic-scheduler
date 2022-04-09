@@ -10,16 +10,16 @@ import java.time.LocalDateTime;
 @Getter
 public class TimeRange {
 
-    private final LocalDateTime begin;
+    private final LocalDateTime current;
 
     private final LocalDateTime end;
 
     public TimeRange(LocalDate begin, LocalDate end) {
-        this.begin = begin.atStartOfDay();
+        this.current = begin.atStartOfDay();
         this.end = end.atStartOfDay();
     }
 
     public boolean isAscending() {
-        return begin.isBefore(end);
+        return current.isBefore(end);
     }
 }

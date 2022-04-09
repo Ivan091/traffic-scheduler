@@ -21,12 +21,12 @@ public class LoopWorkerService {
     @Autowired
     private Supplier<LocalDateTime> localDateTimeSupplier;
 
-    public void schedule(Integer origin, Worker worker) {
+    public void schedule(Integer origin, Scheduling worker) {
         var currentTime = localDateTimeSupplier.get();
         schedule(origin, worker, currentTime);
     }
 
-    public void schedule(Integer origin, Worker worker, LocalDateTime currentTime) {
+    public void schedule(Integer origin, Scheduling worker, LocalDateTime currentTime) {
         var scheduling = loopWorkerCache.requestScheduling(currentTime, origin);
         var planTime = nextMomentRule.calculateNext(currentTime, scheduling.getProbabilitySum()).withNano(0);
         worker.scheduleNext(scheduling, planTime);

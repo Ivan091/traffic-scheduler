@@ -1,8 +1,9 @@
 package edu.scheduling.scheduler;
 
+import edu.config.SchedulingProps;
+import edu.model.TimeRange;
 import edu.repo.IntensityRepo;
-import edu.scheduling.handler.CSVFileHandler;
-import edu.scheduling.loop.LoopWorkerFactory;
+import edu.scheduling.loop.WorkerBatch;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,15 +17,12 @@ public class BatchProcessingScheduler {
     private IntensityRepo intensityRepo;
 
     @Autowired
-    private CSVFileHandler fileHandler;
+    private WorkerBatch workerBatch;
 
     @Autowired
-    private LoopWorkerFactory loopWorkerBatchFactory;
+    private SchedulingProps props;
 
     public void run() {
-        intensityRepo.getOrigins()
-                .parallelStream()
-                .map(o -> loopWorkerBatchFactory.create(o, fileHandler))
-                .forEach(Runnable::run);
+        intensityRepo.getOrigins().forEach(o -> workerBatch.start(o, new TimeRange(props.beginDate, props.endDate)));
     }
 }
