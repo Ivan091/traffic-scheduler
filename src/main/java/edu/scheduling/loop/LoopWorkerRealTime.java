@@ -1,10 +1,12 @@
 package edu.scheduling.loop;
 
+import edu.model.intensity.SchedulingIntensities;
 import edu.scheduling.SchedulingHandler;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.TaskScheduler;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 
 @AllArgsConstructor
@@ -21,7 +23,13 @@ public class LoopWorkerRealTime implements Worker {
 
     @Override
     public void run() {
-        var planTime = loopWorkerService.planTime(origin, handler);
-        taskScheduler.schedule(this, Timestamp.valueOf(planTime));
+        loopWorkerService.schedule(origin, this);
+    }
+
+    @Override
+    public void scheduleNext(SchedulingIntensities schedulingIntensities, LocalDateTime time) {
+        var timestamp = Timestamp.valueOf(time);
+        taskScheduler.schedule(() -> handler.handle(schedulingIntensities, time), timestamp);
+        taskScheduler.schedule(this, timestamp);
     }
 }

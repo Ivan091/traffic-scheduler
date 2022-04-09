@@ -1,7 +1,6 @@
 package edu.scheduling.loop;
 
 import edu.scheduling.NextMomentRule;
-import edu.scheduling.SchedulingHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,15 +21,14 @@ public class LoopWorkerService {
     @Autowired
     private Supplier<LocalDateTime> localDateTimeSupplier;
 
-    public LocalDateTime planTime(Integer origin, SchedulingHandler handler) {
+    public void schedule(Integer origin, Worker worker) {
         var currentTime = localDateTimeSupplier.get();
-        return planTime(origin, handler, currentTime);
+        schedule(origin, worker, currentTime);
     }
 
-    public LocalDateTime planTime(Integer origin, SchedulingHandler handler, LocalDateTime currentTime) {
+    public void schedule(Integer origin, Worker worker, LocalDateTime currentTime) {
         var scheduling = loopWorkerCache.requestScheduling(currentTime, origin);
         var planTime = nextMomentRule.calculateNext(currentTime, scheduling.getProbabilitySum()).withNano(0);
-        handler.handle(scheduling, planTime);
-        return planTime;
+        worker.scheduleNext(scheduling, planTime);
     }
 }

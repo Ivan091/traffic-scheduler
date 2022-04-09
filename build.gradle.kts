@@ -8,7 +8,7 @@ repositories {
     mavenCentral()
 }
 dependencies {
-    val springPlatform = platform("org.springframework.boot:spring-boot-dependencies:2.6.3")
+    val springPlatform = platform("org.springframework.boot:spring-boot-dependencies:2.6.6")
     implementation(springPlatform)
     annotationProcessor(springPlatform)
 
